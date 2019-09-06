@@ -8,18 +8,15 @@ namespace StringCalculator
         {
             string[] numbers = input.Split(',');
             int total = 0;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < numbers.Length; i++)
             {
-                if (i < numbers.Length)
+                try
                 {
-                    try
-                    {
-                        total += int.Parse(numbers[i]);
-                    }
-                    catch (FormatException e)
-                    {
-                        total += 0;
-                    }
+                    total += int.Parse(numbers[i]);
+                }
+                catch (FormatException e)
+                {
+                    total += 0;
                 }
             }
 
