@@ -1,28 +1,40 @@
 ﻿using System;
+using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace StringCalculator
 {
     class Calculator
     {
+        private static Calculator calc = new Calculator();
+
         private void Calculate(String input)
         {
+            input = calc.FormatDelimitter(input);
             string[] numbers = input.Split(',');
+            ArrayList negNumbers = new ArrayList();
             int total = 0;
+
             for (int i = 0; i < numbers.Length; i++)
             {
                 try
                 {
-                    total += int.Parse(numbers[i]);
+                    if (int.Parse(numbers[i]) > 0)
+                    {
+                        total += int.Parse(numbers[i]);
+                    } else
+                    {
+                        negNumbers.Add(numbers[i]);
+                    }
                 }
                 catch (FormatException e)
                 {
-                    total += 0;
+                    
                 }
             }
 
             Console.WriteLine("Total: " + total);
-            Console.ReadLine();
+            calc.PrintNegNumbers(negNumbers);
         }
 
         // I'm certain there's a better way to do this (possibly with regex) but would need more time
@@ -36,14 +48,24 @@ namespace StringCalculator
             return input;
         }
 
+        private void PrintNegNumbers(ArrayList negNumbers)
+        {
+            if (negNumbers.Count > 0)
+            {
+                Console.Write("Negative numbers denied: ");
+                for (int i = 0; i < negNumbers.Count; i++)
+                {
+                    Console.Write(negNumbers[i] + " ");
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
-            Calculator calc = new Calculator();
-
             Console.Write("Input string: ");
             String input = Console.ReadLine();
-            input = calc.FormatDelimitter(input);
             calc.Calculate(input);
+            Console.ReadLine();
         }
     }
 }
