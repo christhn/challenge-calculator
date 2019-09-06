@@ -19,10 +19,11 @@ namespace StringCalculator
             {
                 try
                 {
-                    if (int.Parse(numbers[i]) > 0)
+                    if ((int.Parse(numbers[i]) > 0) && int.Parse(numbers[i]) < 1001)
                     {
                         total += int.Parse(numbers[i]);
-                    } else
+                    }
+                    else if (int.Parse(numbers[i]) < 0)
                     {
                         negNumbers.Add(numbers[i]);
                     }
