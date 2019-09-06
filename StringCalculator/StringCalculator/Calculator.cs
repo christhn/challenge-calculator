@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace StringCalculator
 {
@@ -24,12 +25,24 @@ namespace StringCalculator
             Console.ReadLine();
         }
 
+        // I'm certain there's a better way to do this (possibly with regex) but would need more time
+        private String FormatDelimitter(String input)
+        {
+            if (input.Contains("\\n"))
+            {
+                input = input.Replace("\\n", ",");
+            }
+
+            return input;
+        }
+
         static void Main(string[] args)
         {
+            Calculator calc = new Calculator();
+
             Console.Write("Input string: ");
             String input = Console.ReadLine();
-
-            Calculator calc = new Calculator();
+            input = calc.FormatDelimitter(input);
             calc.Calculate(input);
         }
     }
