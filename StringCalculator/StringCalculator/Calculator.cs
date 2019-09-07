@@ -43,12 +43,21 @@ namespace StringCalculator
         {
             // remove the // and create a common delimiter to normalize the string
             int index = input.IndexOf("//");
+            String delimiter = null;
             if (index == 0)
             {
                 if (input.Length > 2)
                 {
                     input = input.Remove(0, 2);
-                    String delimiter = input[0].ToString();
+                    if (input[0].Equals('['))
+                    {
+                        delimiter = input.Substring(1, input.IndexOf(']') - 1);
+                        input = input.Remove(0, input.IndexOf(']') - 1);
+                    }
+                    else
+                    {
+                        delimiter = input[0].ToString();
+                    }
                     if (input.Contains(delimiter))
                     {
                         input = input.Replace(delimiter, ",");
