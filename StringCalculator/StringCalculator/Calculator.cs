@@ -13,15 +13,28 @@ namespace StringCalculator
             input = calc.NormalizeString(input);
             string[] numbers = input.Split(',');
             ArrayList negNumbers = new ArrayList();
+            string formula = null;
             int total = 0;
 
             for (int i = 0; i < numbers.Length; i++)
             {
                 try
                 {
-                    if ((int.Parse(numbers[i]) > 0) && int.Parse(numbers[i]) < 1001)
+                    if (int.Parse(numbers[i]) > 1000)
+                    {
+                        throw new FormatException();
+                    }
+                    else if ((int.Parse(numbers[i]) > 0))
                     {
                         total += int.Parse(numbers[i]);
+                        if (formula == null) 
+                        {
+                            formula = int.Parse(numbers[i]).ToString();
+                        }
+                        else
+                        {
+                            formula += "+" + int.Parse(numbers[i]).ToString();
+                        }
                     }
                     else if (int.Parse(numbers[i]) < 0)
                     {
@@ -30,11 +43,20 @@ namespace StringCalculator
                 }
                 catch (FormatException e)
                 {
-                    
+                    if ((i == 0) && (numbers[i] != ""))
+                    {
+                        formula += "0";
+                    }
+                    else if (i > 0)
+                    {
+                        formula += "+0";
+                    }
                 }
             }
 
+            formula += " = " + total;
             Console.WriteLine("Total: " + total);
+            Console.WriteLine("Formula: " + formula);
             calc.PrintNegNumbers(negNumbers);
         }
 
