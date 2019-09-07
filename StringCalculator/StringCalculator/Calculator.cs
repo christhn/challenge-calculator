@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace StringCalculator
 {
-    class Calculator
+    public class Calculator
     {
         private static Calculator calc = new Calculator();
 
@@ -27,14 +27,7 @@ namespace StringCalculator
                     else if ((int.Parse(numbers[i]) > 0))
                     {
                         total += int.Parse(numbers[i]);
-                        if (formula == null) 
-                        {
-                            formula = int.Parse(numbers[i]).ToString();
-                        }
-                        else
-                        {
-                            formula += "+" + int.Parse(numbers[i]).ToString();
-                        }
+                        formula = createFormula(formula, numbers[i], false);
                     }
                     else if (int.Parse(numbers[i]) < 0)
                     {
@@ -43,14 +36,7 @@ namespace StringCalculator
                 }
                 catch (FormatException e)
                 {
-                    if ((i == 0) && (numbers[i] != ""))
-                    {
-                        formula += "0";
-                    }
-                    else if (i > 0)
-                    {
-                        formula += "+0";
-                    }
+                    formula = createFormula(formula, numbers[i], true);
                 }
             }
 
@@ -60,9 +46,37 @@ namespace StringCalculator
             calc.PrintNegNumbers(negNumbers);
         }
 
+        public string createFormula(String formula, String number, bool exception)
+        {
+            if (!exception)
+            {
+                if (formula == null)
+                {
+                    formula = int.Parse(number).ToString();
+                }
+                else
+                {
+                    formula += "+" + int.Parse(number).ToString();
+                }
+            }
+            else
+            {
+                if ((formula == null) && (number != ""))
+                {
+                    formula += "0";
+                }
+                else if (number != "")
+                {
+                    formula += "+0";
+                }
+            }
+
+            return formula;
+        }
+
         // I'm certain there's a better way to do this (possibly with regex) but would need more time
         // Just thinking outloud: can this also be done with a configuration file or a map?
-        private string NormalizeString(String input)
+        public string NormalizeString(String input)
         {
             // remove the // and create a common delimiter to normalize the string
             int index = input.IndexOf("//");
@@ -96,7 +110,7 @@ namespace StringCalculator
         }
 
         // convert all delimiters to commas for easier management
-        private string swapDelimiter(String input, String delimiter)
+        public string swapDelimiter(String input, String delimiter)
         {
             if (input.Contains(delimiter))
             {
