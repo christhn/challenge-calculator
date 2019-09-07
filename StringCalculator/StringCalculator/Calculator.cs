@@ -10,7 +10,7 @@ namespace StringCalculator
 
         private void Calculate(String input)
         {
-            input = calc.FormatDelimitter(input);
+            input = calc.NormalizeString(input);
             string[] numbers = input.Split(',');
             ArrayList negNumbers = new ArrayList();
             int total = 0;
@@ -39,8 +39,23 @@ namespace StringCalculator
         }
 
         // I'm certain there's a better way to do this (possibly with regex) but would need more time
-        private String FormatDelimitter(String input)
+        private String NormalizeString(String input)
         {
+            // remove the // and create a common delimiter to normalize the string
+            int index = input.IndexOf("//");
+            if (index == 0)
+            {
+                if (input.Length > 2)
+                {
+                    input = input.Remove(0, 2);
+                    String delimiter = input[0].ToString();
+                    if (input.Contains(delimiter))
+                    {
+                        input = input.Replace(delimiter, ",");
+                    }
+                }
+            }
+
             if (input.Contains("\\n"))
             {
                 input = input.Replace("\\n", ",");
