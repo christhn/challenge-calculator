@@ -56,8 +56,9 @@ namespace StringCalculator.StringCalculatorTests
         {
             string input = "1\\n2,3";
             string expected = "1,2,3";
+            string delimiter = "\\n";
             var calc = new Calculator();
-            string actual = calc.NormalizeString(input);
+            string actual = calc.NormalizeString(input, delimiter);
 
             Assert.AreEqual(expected, actual);
         }
@@ -67,8 +68,9 @@ namespace StringCalculator.StringCalculatorTests
         {
             string input = "//;\\n2;5";
             string expected = ",,2,5";
+            string delimiter = "\\n";
             var calc = new Calculator();
-            string actual = calc.NormalizeString(input);
+            string actual = calc.NormalizeString(input, delimiter);
 
             Assert.AreEqual(expected, actual);
         }
@@ -78,8 +80,9 @@ namespace StringCalculator.StringCalculatorTests
         {
             string input = "//[***]\\n11***22***33";
             string expected = ",11,22,33";
+            string delimiter = "\\n";
             var calc = new Calculator();
-            string actual = calc.NormalizeString(input);
+            string actual = calc.NormalizeString(input, delimiter);
 
             Assert.AreEqual(expected, actual);
         }
@@ -89,8 +92,21 @@ namespace StringCalculator.StringCalculatorTests
         {
             string input = "//[*][!!][r9r]\\n11r9r22*33!!44";
             string expected = ",11,22,33,44";
+            string delimiter = "\\n";
             var calc = new Calculator();
-            string actual = calc.NormalizeString(input);
+            string actual = calc.NormalizeString(input, delimiter);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void normalizeString_AltDelimiter()
+        {
+            string input = "//[*][!!][r9r];11r9r22*33!!44";
+            string expected = ",11,22,33,44";
+            string delimiter = ";";
+            var calc = new Calculator();
+            string actual = calc.NormalizeString(input, delimiter);
 
             Assert.AreEqual(expected, actual);
         }

@@ -8,9 +8,9 @@ namespace StringCalculator
     {
         private static Calculator calc = new Calculator();
 
-        private void Calculate(string input)
+        private void Calculate(string input, string defaultDelimiter, bool deny, int upperBound)
         {
-            input = calc.NormalizeString(input);
+            input = calc.NormalizeString(input, defaultDelimiter);
             string[] numbers = input.Split(',');
             ArrayList negNumbers = new ArrayList();
             string formula = null;
@@ -20,7 +20,7 @@ namespace StringCalculator
             {
                 try
                 {
-                    if (int.Parse(numbers[i]) > 1000)
+                    if (int.Parse(numbers[i]) > upperBound)
                     {
                         throw new FormatException();
                     }
@@ -29,12 +29,12 @@ namespace StringCalculator
                         total += int.Parse(numbers[i]);
                         formula = createFormula(formula, numbers[i], false);
                     }
-                    else if (int.Parse(numbers[i]) < 0)
+                    else if (deny && (int.Parse(numbers[i]) < 0))
                     {
                         negNumbers.Add(numbers[i]);
                     }
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     formula = createFormula(formula, numbers[i], true);
                 }
@@ -46,7 +46,7 @@ namespace StringCalculator
             calc.PrintNegNumbers(negNumbers);
         }
 
-        public string createFormula(String formula, String number, bool exception)
+        public string createFormula(string formula, string number, bool exception)
         {
             if (!exception)
             {
@@ -76,7 +76,7 @@ namespace StringCalculator
 
         // I'm certain there's a better way to do this (possibly with regex) but would need more time
         // Just thinking outloud: can this also be done with a configuration file or a map?
-        public string NormalizeString(String input)
+        public string NormalizeString(string input, string defaultDelimiter)
         {
             // remove the // and create a common delimiter to normalize the string
             int index = input.IndexOf("//");
@@ -103,7 +103,7 @@ namespace StringCalculator
                 }
             }
 
-            delimiter = ("\\n");
+            delimiter = (defaultDelimiter);
             input = calc.swapDelimiter(input, delimiter);
 
             return input;
@@ -129,14 +129,43 @@ namespace StringCalculator
                 {
                     Console.Write(negNumbers[i] + " ");
                 }
+                Console.WriteLine();
             }
         }
 
         static void Main(string[] args)
         {
+            Console.Write("Alternate delimiter (default is \\n): ");
+            string defaultDelimiter = Console.ReadLine();
+            Console.WriteLine();
+
+            bool deny = true;
+            try
+            {
+                Console.Write("Deny negative numbers (true/false): ");
+                deny = bool.Parse(Console.ReadLine());
+                Console.WriteLine();
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid response! Defaulting to true.\n");
+            }
+
+            int upperBound = 1000;
+            try
+            {
+                Console.Write("Upper bound (default is 1000): ");
+                upperBound = int.Parse(Console.ReadLine());
+                Console.WriteLine();
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid response! Defaulting to 1000.\n");
+            }
+
             Console.Write("Input string: ");
             string input = Console.ReadLine();
-            calc.Calculate(input);
+            calc.Calculate(input, defaultDelimiter, deny, upperBound);
             Console.ReadLine();
         }
     }
