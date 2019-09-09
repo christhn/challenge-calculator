@@ -24,14 +24,14 @@ namespace StringCalculator
                     {
                         throw new FormatException();
                     }
-                    else if ((int.Parse(numbers[i]) > 0))
-                    {
-                        total += int.Parse(numbers[i]);
-                        formula = createFormula(formula, numbers[i], false);
-                    }
                     else if (deny && (int.Parse(numbers[i]) < 0))
                     {
                         negNumbers.Add(numbers[i]);
+                    }
+                    else
+                    {
+                        total += int.Parse(numbers[i]);
+                        formula = createFormula(formula, numbers[i], false);
                     }
                 }
                 catch (FormatException)
@@ -135,6 +135,7 @@ namespace StringCalculator
 
         static void Main(string[] args)
         {
+            // can also make these options global variables?
             Console.Write("Alternate delimiter (default is \\n): ");
             string defaultDelimiter = Console.ReadLine();
             Console.WriteLine();
